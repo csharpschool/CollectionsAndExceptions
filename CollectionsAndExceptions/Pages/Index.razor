@@ -1,0 +1,25 @@
+﻿@page "/"
+@using CollectionsAndExceptions.Classes;
+@inject PeriodicTable pt
+
+<PageTitle>Index</PageTitle>
+
+<h1>Periodic Table</h1>
+
+<input @bind="pt.NewElement.PeriodicNumber" />
+<input @bind="pt.NewElement.Name" />
+<input @bind="pt.NewElement.Symbol" />
+<button class="btn btn-success" @onclick="pt.Add">Add</button>
+<button class="btn btn-info" @onclick="DisplayData">Get</button>
+<p>@message</p>
+
+@code {
+    string message = string.Empty;
+
+    void DisplayData()
+    {
+        var element = pt.Get();
+        if (element is null) message = "No elements in the list.";
+        else message = $"{element.PeriodicNumber} | {element.Symbol} | {element.Name}";
+    }
+}
