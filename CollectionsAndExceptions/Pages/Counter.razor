@@ -1,18 +1,32 @@
 ﻿@page "/counter"
+@using CollectionsAndExceptions.Classes;
 
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="CreateDeck">Create Deck</button>
+
+<div class="btn-group" role="group" aria-label="Basic outlined example">
+    <button @onclick="@(()=>deck.Filter(Suits.Spades))" type="button" class="btn btn-outline-primary">Spades</button>
+    <button @onclick="@(()=>deck.Filter(Suits.Clubs))" type="button" class="btn btn-outline-primary">Clubs</button>
+    <button @onclick="@(()=>deck.Filter(Suits.Hearts))" type="button" class="btn btn-outline-primary">Hearts</button>
+    <button @onclick="@(()=>deck.Filter(Suits.Diamonds))" type="button" class="btn btn-outline-primary">Diamonds</button>
+</div>
+
+<ul>
+    @foreach(var card in deck.Cards)
+    {
+        <li>@card.Suit @card.Value</li>
+    }
+</ul>
 
 @code {
-    private int currentCount = 0;
+    Deck deck = new();
 
-    private void IncrementCount()
+    private void CreateDeck()
     {
-        currentCount++;
+        deck.CreateDeck();
     }
 }
