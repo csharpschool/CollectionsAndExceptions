@@ -1,4 +1,5 @@
-﻿using CollectionsAndExceptions.Extensions;
+﻿using CollectionsAndExceptions.Exceptions;
+using CollectionsAndExceptions.Extensions;
 using System.Xml.Linq;
 
 namespace CollectionsAndExceptions.Classes;
@@ -10,19 +11,36 @@ public class PeriodicTable
     Queue<Element> q = new();
     public Element NewElement { get; set; } = new();
 
-    public void Add()
+    public string Add()
     {
-        if (!NewElement.Check()) return;
+        //if (!NewElement.Check()) return;
+        try
+        {
+            NewElement.Check();
+            q.Enqueue((Element)NewElement.Clone());
+            elements.Add(NewElement);
 
-        q.Enqueue((Element)NewElement.Clone());
-        elements.Add(NewElement);
-
-        NewElement.Name = "Changed value";
+            NewElement.Name = "Changed value";
+            return string.Empty;
+        }
+        catch (ElementException ex) when (ex.Element?.PeriodicNumber < 0) 
+        {
+            return $"{ex.Message} {ex.Element?.PeriodicNumber}";
+        }
+        catch (ElementException ex) when (ex.Element?.PeriodicNumber >= 230)
+        {
+            return $"{ex.Message} {ex.Element?.PeriodicNumber}";
+        }
+        catch (Exception ex)
+        {
+            return ex.Message;
+        }
+        finally { }
     }
 
     public Element? Get()
     {
-        if (q.Count == 0) return null;
+        if (q.Count == 0) throw new IndexOutOfRangeException("Queue is empty.");
 
         var cloedList = elements.CloneList();
 

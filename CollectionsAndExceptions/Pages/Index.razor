@@ -9,7 +9,7 @@
 <input @bind="pt.NewElement.PeriodicNumber" />
 <input @bind="pt.NewElement.Name" />
 <input @bind="pt.NewElement.Symbol" />
-<button class="btn btn-success" @onclick="pt.Add">Add</button>
+<button class="btn btn-success" @onclick="@(() => message = pt.Add())">Add</button>
 <button class="btn btn-info" @onclick="DisplayData">Get</button>
 <p>@message</p>
 
@@ -18,8 +18,20 @@
 
     void DisplayData()
     {
-        var element = pt.Get();
-        if (element is null) message = "No elements in the list.";
-        else message = $"{element.PeriodicNumber} | {element.Symbol} | {element.Name}";
+        try
+        {
+            var element = pt.Get();
+            if (element is null) message = "No elements in the list.";
+            else message = $"{element.PeriodicNumber} | {element.Symbol} | {element.Name}";
+        }
+        catch (IndexOutOfRangeException ex)
+        {
+            message = $"Boo hoo: {ex.Message}";
+        }
+        catch(Exception ex)
+        {
+            message = ex.Message;
+        }
+
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace CollectionsAndExceptions.Classes
+﻿using CollectionsAndExceptions.Exceptions;
+
+namespace CollectionsAndExceptions.Classes
 {
     public class Element : ICloneable
     {
@@ -8,7 +10,7 @@
 
         public object Clone() => MemberwiseClone();
 
-        public bool Check()
+        /*public bool Check()
         {
             if(PeriodicNumber is null || 
                PeriodicNumber < 1 || 
@@ -16,7 +18,16 @@
                Symbol.Length < 2) return false;
 
             return true;
-
+        }*/
+        public void Check()
+        {
+            if (PeriodicNumber is null ||
+               PeriodicNumber < 1 ||
+               Name.Length < 5 ||
+               Symbol.Length < 2)
+                throw new ElementException(this, "Invalid property value");
+               //throw new ArgumentException("Invalid property value");
         }
     }
 }
+
